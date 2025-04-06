@@ -7,6 +7,8 @@
   "deploy": {
     "healthcheck": {
       "enabled": false
-    }
+    },
+    "restartPolicyType": "on-failure",
+    "restartPolicyMaxRetries": 3
   }
 } 

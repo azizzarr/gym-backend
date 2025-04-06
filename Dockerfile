@@ -27,5 +27,11 @@ ENV MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=always
 # Expose port
 EXPOSE 8082
 
+# Create a startup script
+RUN echo '#!/bin/sh\n\
+echo "Starting application..."\n\
+exec java $JAVA_OPTS -jar app.jar --spring.profiles.active=prod\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
 # Start the application
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"] 
+ENTRYPOINT ["/app/start.sh"] 
