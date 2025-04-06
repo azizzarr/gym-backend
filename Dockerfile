@@ -18,10 +18,9 @@ RUN useradd -r -s /bin/false gymapp && \
 # Copy files from build stage
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
-# Create config directory and copy configuration files
-RUN mkdir -p /app/config
-COPY --from=build /app/src/main/resources/application-prod.properties /app/config/
-COPY --from=build /app/src/main/resources/firebase-service-account.json /app/config/
+# Copy entrypoint script
+COPY docker-entrypoint.sh /app/
+RUN chmod +x /app/docker-entrypoint.sh
 
 # Set permissions
 RUN chown -R gymapp:gymapp /app
@@ -43,4 +42,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:8082/api/actuator/health || exit 1
 
 # Start the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar --spring.config.location=file:/app/config/application-prod.properties"] 
+ENTRYPOINT ["/app/docker-entrypoint.sh"] 
