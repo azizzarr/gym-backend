@@ -1,8 +1,8 @@
 [build]
 builder = "nixpacks"
-buildCommand = "./mvnw clean package -DskipTests"
+buildCommand = "./mvnw clean package -DskipTests -X"
 
 [deploy]
-startCommand = "ls -la && java -jar ./target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --spring.config.location=classpath:/application-prod.properties"
+startCommand = "pwd && ls -la && ls -la target/ && java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --spring.config.location=classpath:/application-prod.properties"
 healthcheckPath = "/api/actuator/health"
 healthcheckTimeout = 100 
