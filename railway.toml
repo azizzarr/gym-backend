@@ -1,6 +1,6 @@
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+builder = "nixpacks"
+buildCommand = "./mvnw clean package -DskipTests"
 
 [deploy]
-startCommand = "java -jar target/*.jar --spring.profiles.active=prod" 
+startCommand = "java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod" 
