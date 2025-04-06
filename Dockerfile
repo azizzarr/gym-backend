@@ -20,8 +20,8 @@ COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Create config directory and copy configuration files
 RUN mkdir -p /app/config
-COPY src/main/resources/application-prod.properties /app/config/
-COPY src/main/resources/firebase-service-account.json /app/config/
+COPY --from=build /app/src/main/resources/application-prod.properties /app/config/
+COPY --from=build /app/src/main/resources/firebase-service-account.json /app/config/
 
 # Set permissions
 RUN chown -R gymapp:gymapp /app
