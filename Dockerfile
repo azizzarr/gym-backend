@@ -10,6 +10,9 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
+# Install bash and curl for healthcheck
+RUN apt-get update && apt-get install -y bash curl && rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user
 RUN useradd -m -u 1001 -U appuser && \
     mkdir -p /app/logs && \
@@ -49,4 +52,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:8082/api/actuator/health || exit 1
 
 # Start the application
-ENTRYPOINT ["/app/docker-entrypoint.sh"] 
+ENTRYPOINT ["/bin/bash", "/app/docker-entrypoint.sh"] 
