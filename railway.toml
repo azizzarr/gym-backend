@@ -3,6 +3,5 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "java -jar target/*.jar --spring.profiles.active=prod"
 healthcheckPath = "/api/actuator/health"
 healthcheckTimeout = 100 
