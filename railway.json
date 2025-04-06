@@ -3,12 +3,5 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "Dockerfile"
-  },
-  "deploy": {
-    "healthcheck": {
-      "enabled": false
-    },
-    "restartPolicyType": "on-failure",
-    "restartPolicyMaxRetries": 3
   }
 } 
