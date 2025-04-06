@@ -19,10 +19,6 @@ RUN useradd -r -s /bin/false gymapp && \
 # Copy files from build stage
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 
-# Copy configuration files
-COPY src/main/resources/firebase-service-account.json /app/config/
-COPY src/main/resources/application-prod.properties /app/config/
-
 # Copy entrypoint script
 COPY docker-entrypoint.sh /app/
 RUN chmod +x /app/docker-entrypoint.sh
@@ -38,6 +34,11 @@ ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
 ENV CORS_ALLOWED_ORIGINS=https://gym-app-c37ed.web.app
 ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError"
 ENV GOOGLE_APPLICATION_CREDENTIALS=/app/config/firebase-service-account.json
+ENV FIREBASE_PROJECT_ID=gym-app-c37ed
+ENV FIREBASE_PRIVATE_KEY_ID=dummy-key-id
+ENV FIREBASE_PRIVATE_KEY=dummy-private-key
+ENV FIREBASE_CLIENT_EMAIL=firebase-adminsdk-dummy@gym-app-c37ed.iam.gserviceaccount.com
+ENV FIREBASE_CLIENT_ID=dummy-client-id
 
 # Expose port
 EXPOSE 8082

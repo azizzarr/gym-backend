@@ -1,0 +1,10 @@
+[build]
+builder = "nixpacks"
+buildCommand = "./mvnw clean package -DskipTests"
+
+[deploy]
+startCommand = "chmod +x railway-entrypoint.sh && ./railway-entrypoint.sh"
+healthcheckPath = "/api/actuator/health"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10 
