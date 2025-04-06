@@ -1,8 +1,7 @@
 # Build stage
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY pom.xml .
-RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
@@ -17,7 +16,7 @@ RUN useradd -r -s /bin/false gymapp && \
     chown -R gymapp:gymapp /app
 
 # Copy files from build stage
-COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /app/
@@ -41,11 +40,11 @@ ENV FIREBASE_CLIENT_EMAIL=firebase-adminsdk-dummy@gym-app-c37ed.iam.gserviceacco
 ENV FIREBASE_CLIENT_ID=dummy-client-id
 
 # Expose port
-EXPOSE 8082
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:8082/api/actuator/health || exit 1
+  CMD curl -f http://localhost:8080/api/actuator/health || exit 1
 
 # Start the application
-ENTRYPOINT ["/app/docker-entrypoint.sh"] 
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"] 
