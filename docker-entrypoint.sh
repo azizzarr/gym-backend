@@ -21,7 +21,7 @@ logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
 
 # Firebase Configuration
 firebase.project-id=gym-app-c37ed
-firebase.credentials-file=classpath:firebase-service-account.json
+firebase.credentials-file=file:/app/config/firebase-service-account.json
 
 # CORS Configuration
 cors.allowed-origins=\${CORS_ALLOWED_ORIGINS:https://gym-app-c37ed.web.app}
@@ -67,4 +67,4 @@ EOF
 fi
 
 # Start the application
-exec java $JAVA_OPTS -jar app.jar --spring.profiles.active=prod 
+exec java $JAVA_OPTS -jar app.jar --spring.profiles.active=prod --spring.config.location=file:/app/config/application-prod.properties 

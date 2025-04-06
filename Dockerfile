@@ -13,10 +13,15 @@ WORKDIR /app
 # Create non-root user
 RUN useradd -r -s /bin/false gymapp && \
     mkdir -p /app/logs && \
+    mkdir -p /app/config && \
     chown -R gymapp:gymapp /app
 
 # Copy files from build stage
 COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
+
+# Copy configuration files
+COPY src/main/resources/firebase-service-account.json /app/config/
+COPY src/main/resources/application-prod.properties /app/config/
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /app/
