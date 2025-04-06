@@ -3,5 +3,11 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "healthcheck": {
+      "path": "/api/public/health",
+      "port": 8082
+    }
   }
 } 
