@@ -4,12 +4,8 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,41 +14,29 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${firebase.project-id:gym-app-c37ed}")
-    private String projectId;
-    
-    @Value("${firebase.private-key-id:}")
-    private String privateKeyId;
-    
-    @Value("${firebase.private-key:}")
-    private String privateKey;
-    
-    @Value("${firebase.client-email:}")
-    private String clientEmail;
-    
-    @Value("${firebase.client-id:}")
-    private String clientId;
+    private static final String FIREBASE_CONFIG = "{"
+        + "\"type\":\"service_account\","
+        + "\"project_id\":\"gym-app-c37ed\","
+        + "\"private_key_id\":\"3ea2e8226280bfdcc6ffc2c1881c1a2575953b35\","
+        + "\"private_key\":\"-----BEGIN PRIVATE KEY-----\\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC6N5nQuNG6zkzW\\nvl6ICsXXeekBper93eMXcqY/b3rAR38zNcU1wI+QreExG57+KP3HOeLh6OhEaHNs\\nkFTQRFNrhp/Hbt4CW+nIqG0Q5RpmZ6XYTV2t++xOpKlld0Ub/Dewm+aCK4VnFB26\\nMXuv6DMVnGSAmD7FsAmebG1reBrF6hT6Ui18IbRz8tR7Za0D/Ia3W0gsp83iKQcK\\n2ZYlefWX6lfmNBKXOeRK/CyiAcOwhGenbgi1ZdfbvqZ+i2fVGLp+agydaTFZRpA5\\nM1Ld/huyZzHm/sUMH0dYKEox47CkhtGzhGN+hlV3laSi/LPyCptmcTLiB3UR+xTO\\nvCMZQgddAgMBAAECggEAB4faGOkbKjJ6RFucgmSVIvqozp/sGeollebVYaQGKHfR\\nEBFw8T82pG4zuNhaHK3XCCiHdrAEPJ1QwFIx69481WYIriMF/Whu0uY6IEBznzKP\\n2r3TjQauxBtqnPzZdvaYi0mID+Q8rTImEEfnWEd2pr1qtGdJGpYyPWLl0JPMhAu6\\ntosn4gvEnN4sgAY1zxdcDRYGXrk9XI+EvCVu4OmcfFtSL2VrwzbZmt922qlxI6Yj\\n4cVvwpjIHnfCinqkEAe6NJk+FpOCkADjxpM5CfoN4PKOWP/P28v5/y+lJRCmklf2\\noyk2gUnIMnG/Pp+OWfTs7TypVV+rRJMT38xd4tpDYQKBgQDbaZmVpu9CCB8vfAt4\\n5Ta9ghPJUaBgTMshZeSw8e/jX7ei/PjILKIqcpDM7zNDfrBRSBPjzsSOOxlk+n+O\\nGkK8nz+/q3CTT2dXX2LKqhFg3ZjEI27SpUSoittLdhl2xVHBgYS4mXtoH3/1mTKx\\nhd6R5RnuXD6P+OoteXj1bRSvhQKBgQDZRPEGmpmC0ANLBPNRQwKoOjK3aw15EKEY\\npRnzsFpRAdXtJ5p7hSkdItpJkRmKGkPr4XZk592WlkHtO42FTu5f2TrZFb+2Iwnn\\nmsXIg3mbRyD8cMSSI0F6Z0Ur3q3lOdrptScDOkXuEBCgaslNtug9tqKFlvpR7uLy\\nc/zLKP3D+QKBgQDR4KxR81HP5vb1tAFBTnhTRDbrDtKK60ovE0lzXKnr5CZDmRnc\\nWJ1yXw5VicWOnYPI7FpiQenQZ4W+CsOyyTnnNamEDVjtADpI4Gwekhl3f+DeVUpv\\n4jjPw6tK/pgS/WJb6CltbxsVmXQMGNPd7cDd67knQUNy8lYG07g5g3MTBQKBgQCn\\nQK0SWlymGJ8QVwU/nwginHqCO8SpV6XLpPzvXOiJx5H4+C2xvHZD2ZqUW0B/0WxL\\n3soXL26jB5REnT16S6Kw4jas+lMUULDFO53Zl2w7nmvEKMMJhF5ZbboP5WGUPg9J\\nLYyUrX07n95MvyerzYvGRhuiHvEftXe7EJKfijSfcQKBgQCgxXt/AqNXhf0bknZz\\nvJ2imqs4yFF6bAFtCOx8SLUPqrDxs5c2hAWxsZUfJwtR2Bav3naLAf0TTqXHEBBK\\npnemY3zvq8yUdjWpWgeB0h3SJ/uCj5SI9dzPU259mvp0d1Tp/ZauWofgzMTTWPJY\\n+PRy6fYgsshUtkhmvfb+h0t+Zw==\\n-----END PRIVATE KEY-----\\n\","
+        + "\"client_email\":\"firebase-adminsdk-fbsvc@gym-app-c37ed.iam.gserviceaccount.com\","
+        + "\"client_id\":\"115509817410061478779\","
+        + "\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\","
+        + "\"token_uri\":\"https://oauth2.googleapis.com/token\","
+        + "\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\","
+        + "\"client_x509_cert_url\":\"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40gym-app-c37ed.iam.gserviceaccount.com\""
+        + "}";
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
-            // Create a JSON string from environment variables
-            String jsonString = String.format(
-                "{\"type\":\"service_account\",\"project_id\":\"%s\",\"private_key_id\":\"%s\"," +
-                "\"private_key\":\"%s\",\"client_email\":\"%s\",\"client_id\":\"%s\"," +
-                "\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://oauth2.googleapis.com/token\"," +
-                "\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\"," +
-                "\"client_x509_cert_url\":\"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dummy%%40gym-app-c37ed.iam.gserviceaccount.com\"}",
-                projectId, privateKeyId, privateKey, clientEmail, clientId
-            );
-            
-            // Create credentials from the JSON string
             GoogleCredentials credentials = GoogleCredentials.fromStream(
-                new ByteArrayInputStream(jsonString.getBytes(StandardCharsets.UTF_8))
+                new ByteArrayInputStream(FIREBASE_CONFIG.getBytes(StandardCharsets.UTF_8))
             );
             
             FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
+                .setProjectId("gym-app-c37ed")
                 .build();
             
             return FirebaseApp.initializeApp(options);
