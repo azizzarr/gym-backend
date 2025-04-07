@@ -7,9 +7,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
@@ -33,20 +35,12 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
-            // Create a JSON string with the Firebase configuration
-            String firebaseConfigJson = String.format(
-                "{\"type\":\"service_account\",\"project_id\":\"%s\",\"private_key_id\":\"%s\",\"private_key\":\"%s\",\"client_email\":\"%s\",\"client_id\":\"%s\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://oauth2.googleapis.com/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\",\"client_x509_cert_url\":\"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%%40%s.iam.gserviceaccount.com\"}",
-                projectId, privateKeyId, privateKey, clientEmail, clientId, projectId
-            );
-            
-            GoogleCredentials credentials = GoogleCredentials.fromStream(
-                new ByteArrayInputStream(firebaseConfigJson.getBytes(StandardCharsets.UTF_8))
-            );
+            InputStream serviceAccount = new ClassPathResource("firebase-service-account.json").getInputStream();
+            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
             
             FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(credentials)
-                .setProjectId(projectId)
-                .build();
+                    .setCredentials(credentials)
+                    .build();
             
             return FirebaseApp.initializeApp(options);
         }
