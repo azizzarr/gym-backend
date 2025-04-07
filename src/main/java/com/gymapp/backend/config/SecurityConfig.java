@@ -46,6 +46,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/api/token/refresh").authenticated()
+                .requestMatchers("/api/actuator/**").denyAll()
+                .requestMatchers("/actuator/**").denyAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(firebaseTokenFilter(), UsernamePasswordAuthenticationFilter.class)
